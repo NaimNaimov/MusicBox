@@ -20,7 +20,10 @@
 Route::group(['middleware' => 'auth'], function () {
 	Route::get('/', 'WelcomeController@index');
 	Route::get('room', 'RoomController@index');
+
+	Route::post('/', 'WelcomeController@videos');
 });
+
 
 
 // Authentication routes...

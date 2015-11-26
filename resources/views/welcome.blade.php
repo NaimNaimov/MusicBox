@@ -14,11 +14,12 @@
 			<div class="title">Online Music Box</div>
 
 			<div class="search">
-				{!! Form::open(array('method' => 'GET')) !!}
+				{!! Form::open() !!}
 					{!! Form::text('search', '', array('placeholder' => 'Enter YouTube URL') )!!}
 					{!! Form::submit('Search') !!}
 				{!! Form::close() !!}
 			</div><!-- /.search -->
+
 			
 			<div class="player-wrapper">
 				<div id="player" id="player"></div>
@@ -29,6 +30,8 @@
 					<ol id="playlist"></ol>
 				</div><!-- /.playlist -->
 			</div><!-- /.player-wrapper -->
+
+			<div class="search-results"></div>
 		</div>
 	</div>
 </body>
