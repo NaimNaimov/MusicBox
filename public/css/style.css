@@ -1,0 +1,50 @@
+/* ------------------------------------------------------------ *\
+	# Reset
+\* ------------------------------------------------------------ */
+
+* { padding: 0; margin: 0; outline: 0; }
+
+/* ------------------------------------------------------------ *\
+	# Base 
+\* ------------------------------------------------------------ */
+
+html,
+body { height: 100%; }
+
+body { display: table; width: 100%; font-family: 'Lato'; font-weight: 100; }
+
+body,
+input { color: #b0bec5; }
+
+label[for],
+input[type="submit"] { cursor: pointer; }
+
+/* ------------------------------------------------------------ *\
+	# Container
+\* ------------------------------------------------------------ */
+
+.container { display: table-cell; text-align: center; vertical-align: middle; }
+
+.content { display: inline-block; text-align: center; }
+
+.title { margin-bottom: 40px; font-size: 96px; }
+
+.quote { font-size: 24px; }
+
+/* ------------------------------------------------------------ *\
+	# Search
+\* ------------------------------------------------------------ */
+
+.search { position: relative; padding-bottom: 20px; }
+.search input { display: block; height: 42px; }
+
+.search input[type="text"] { width: 100%; padding: 10px; font-size: 16px; }
+.search input[type="text"] {
+	-webkit-box-sizing: border-box; 
+	   -moz-box-sizing: border-box; 
+		-ms-box-sizing: border-box; 
+		 -o-box-sizing: border-box; 
+			box-sizing: border-box; 
+}
+
+.search input[type="submit"] { position: absolute; top: 0; right: 0; padding: 0 5px; color: #000; }

@@ -1,48 +1,29 @@
 <html>
-	<head>
-		<title>Laravel</title>
-		
-		<link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+<head>
+	<title>Laravel</title>
+	
+	<link href='//fonts.googleapis.com/css?family=Lato:100' rel='stylesheet' type='text/css'>
+	<link rel="stylesheet" type="text/css" href="css/style.css">
 
-		<style>
-			body {
-				margin: 0;
-				padding: 0;
-				width: 100%;
-				height: 100%;
-				color: #B0BEC5;
-				display: table;
-				font-weight: 100;
-				font-family: 'Lato';
-			}
+	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
+	<script src="js/functions.js"></script>
+</head>
+<body>
+	<div class="container">
+		<div class="content">
+			<div class="title">Online Music Box</div>
 
-			.container {
-				text-align: center;
-				display: table-cell;
-				vertical-align: middle;
-			}
-
-			.content {
-				text-align: center;
-				display: inline-block;
-			}
+			<div class="search">
+				{!! Form::open(array('method' => 'GET')) !!}
+					{!! Form::text('search', '', array('placeholder' => 'Enter YouTube URL') )!!}
+					{!! Form::submit('Search') !!}
+				{!! Form::close() !!}
+			</div><!-- /.search -->
 			
-			.title {
-				font-size: 96px;
-				margin-bottom: 40px;
-			}
-
-			.quote {
-				font-size: 24px;
-			}
-		</style>
-	</head>
-	<body>
-		<div class="container">
-			<div class="content">
-				<div class="title">Laravel 5</div>
-				<div class="quote">{{ Inspiring::quote() }}</div>
-			</div>
+			<div class="player-wrapper" id="player">
+				<div id="player"></div>
+			</div><!-- /.player-wrapper -->
 		</div>
-	</body>
+	</div>
+</body>
 </html>
