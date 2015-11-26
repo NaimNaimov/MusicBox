@@ -11,7 +11,7 @@
 html,
 body { height: 100%; }
 
-body { display: table; width: 100%; font-family: 'Lato'; font-weight: 100; }
+body { display: table; width: 100%; font-family: 'Lato'; font-weight: 300; line-height: 1.2; }
 
 body,
 input { color: #b0bec5; }
@@ -48,3 +48,16 @@ input[type="submit"] { cursor: pointer; }
 }
 
 .search input[type="submit"] { position: absolute; top: 0; right: 0; padding: 0 5px; color: #000; }
+
+/* ------------------------------------------------------------ *\
+	# Player Wrapper
+\* ------------------------------------------------------------ */
+
+.player-wrapper { position: relative; }
+
+/* Playlist */
+.playlist { position: absolute; top: 0; left: 100%; margin-left: 10px; color: #333; text-align: left; }
+.playlist h3 { margin-bottom: 10px; }
+.playlist ol { list-style-position: inside; }
+.playlist li { white-space: nowrap; }
+.playlist .current { font-weight: 400; color: #000; }
