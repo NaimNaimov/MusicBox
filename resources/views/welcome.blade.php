@@ -26,7 +26,7 @@
 				text-align: center;
 				display: inline-block;
 			}
-
+			
 			.title {
 				font-size: 96px;
 				margin-bottom: 40px;
