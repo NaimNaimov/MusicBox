@@ -16,9 +16,9 @@
 	</div><!-- /.shell -->
 
 	
-	<div class="content">
+	<!-- <div class="content">
 		<div class="quote">{{ Inspiring::quote() }}</div>
-	</div>
+	</div> -->
 </div>
 
 @stop

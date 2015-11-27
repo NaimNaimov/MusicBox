@@ -1,8 +1,14 @@
 <?php namespace App\Http\Controllers;
 
-use App\Http\Requests;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Input;
 use App\Http\Controllers\Controller;
-
+use Auth;
+use Validator;
+use App\Room;
+use DB;
+// use Illuminate\Routing\Redirector;
+use Illuminate\Http\RedirectResponse;
 class RoomController extends Controller {
 
 	/**
@@ -12,9 +18,7 @@ class RoomController extends Controller {
 	 */
 	public function index()
 	{
-			// dd($request);
-		// return     $name = $request->input('search');
-		// return view('room');
+		
 		return view('welcome');
 	}
 
@@ -35,16 +39,43 @@ class RoomController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store(Request $request)
+	public function store()
 	{
-		$name = $request->input('name');
-		$privacy = $request->input('status');
-		$slug = str_replace(' ', '-', strtolower($name));
 
-		// $room = new Room
+		$all_rooms = DB::table('rooms')->lists('name');
+		$input = Input::all();
+		$user_id = Auth::user()->id;
+		$name = $input['name'];
+		$validator = Validator::make($input, ['name' => 'required']);
 
+		if ( in_array($name, $all_rooms) ) {
+			$errors['messages']['name'] = array('This name is already taken');
+		}
 
+		if (!$name || !$user_id) {
+			return;
+		}
+		$privacy = $input['status'];
 
+		$slug = str_replace( ' ', '-', strtolower($name) );
+
+		$room = new Room;
+
+		$room->name = $name;
+		$room->slug = $slug;
+		$room->user_id = $user_id;
+		$room->status = $privacy;
+		$room->save();
+
+		if ( $validator->passes() && !$errors) {
+			return redirect('/');
+		} 
+
+		
+		var_dump( array_merge($errors,$validator->messages()) );
+		exit;
+
+		return back()->withInput()->withErrors($errors);
 
 	}
 
