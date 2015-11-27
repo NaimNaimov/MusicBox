@@ -1,26 +1,22 @@
-<html>
-<head>
-	<title>Laravel</title>
-	
-	<link href='//fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-	<link rel="stylesheet" type="text/css" href="css/style.css">
+@extends('app')
 
-	<script src="//code.jquery.com/jquery-1.11.3.min.js"></script>
-	<script src="js/functions.js"></script>
-</head>
-<body>
+@section('content')
 	<div class="container">
 		<div class="content">
 			<div class="title">Online Music Box</div>
 
-			<div class="search">
+			<div class="search form-room">
 				{!! Form::open(array('id' => 'create-room')) !!}
 					{!! Form::text('room-name', '', array('placeholder' => 'Enter Room Name') )!!}
 					
 					<div class="room-status">
-						{!! Form::label('status', 'Room Status') !!}
-						{!! Form::radio('status', 'private', true); !!}
-						{!! Form::radio('status', 'public'); !!}
+						<h4>Room Status</h4>
+
+						{!! Form::radio('status', 'private', true, array('id' => 'status-private')); !!}
+						{!! Form::label('status-private', 'Private'); !!}
+
+						{!! Form::radio('status', 'public', false, array('id' => 'status-public')); !!}
+						{!! Form::label('status-public', 'Public'); !!}
 					</div><!-- /.room-status -->
 
 					{!! Form::submit('Create') !!}
@@ -28,5 +24,4 @@
 			</div><!-- /.search -->
 		</div>
 	</div>
-</body>
-</html>
+@endsection
