@@ -14,8 +14,9 @@
 			<div class="title">Online Music Box</div>
 
 			<div class="search">
-				{!! Form::open(array('id' => 'create-room')) !!}
-					{!! Form::text('room-name', '', array('placeholder' => 'Enter Room Name') )!!}
+				{!! Form::open(['action' => 'RoomController@store', 'id' => 'create-room']) !!}
+					{!! Form::text('name', '', array('placeholder' => 'Enter Room Name') )!!}
+					{{ $errors->first('name')}}
 					
 					<div class="room-status">
 						{!! Form::label('status', 'Room Status') !!}
