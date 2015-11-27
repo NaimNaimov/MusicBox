@@ -58,10 +58,14 @@ a { color: #000; text-decoration: none; }
 .player-wrapper { position: relative; }
 
 /* Playlist */
-.playlist { position: absolute; top: 0; left: 100%; margin-left: 10px; color: #333; text-align: left; }
+.playlist { position: absolute; top: 0; left: 100%; overflow-x: hidden; overflow-y: auto; display: none; width: 200px; height: 100%; margin-left: 10px; color: #333; text-align: left; }
+.playlist.active { display: block; }
+
 .playlist h3 { margin-bottom: 10px; }
 .playlist ol { list-style-position: inside; }
-.playlist li { white-space: nowrap; }
+.playlist li { margin-bottom: 5px; }
+.playlist li:last-child { margin-bottom: 0; }
+
 .playlist .current { font-weight: 400; color: #000; }
 
 /* ------------------------------------------------------------ *\
