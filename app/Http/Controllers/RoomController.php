@@ -3,8 +3,6 @@
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 
-use Illuminate\Http\Request;
-
 class RoomController extends Controller {
 
 	/**
@@ -12,11 +10,12 @@ class RoomController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function index(Request $request)
+	public function index()
 	{
 			// dd($request);
 		// return     $name = $request->input('search');
-		return view('room');
+		// return view('room');
+		return view('welcome');
 	}
 
 	/**
@@ -26,7 +25,9 @@ class RoomController extends Controller {
 	 */
 	public function create()
 	{
-		//
+		// $user = Auth::user();
+		// var_dump($user);
+		return view('room.create');
 	}
 
 	/**
@@ -34,9 +35,17 @@ class RoomController extends Controller {
 	 *
 	 * @return Response
 	 */
-	public function store()
+	public function store(Request $request)
 	{
-		//
+		$name = $request->input('name');
+		$privacy = $request->input('status');
+		$slug = str_replace(' ', '-', strtolower($name));
+
+		// $room = new Room
+
+
+
+
 	}
 
 	/**
@@ -82,10 +91,5 @@ class RoomController extends Controller {
 	{
 		//
 	}
-
-
-	// public function forms() {
-
-	// }
 
 }
