@@ -1,13 +1,15 @@
 @if ( !empty($videos) )
 	@if( is_array($videos) )
-		<ul>
+		<ol>
 			@foreach ($videos as $video)
-				<li data-videoId="{{ $video['id']['videoId'] }}">
-					<img src="{{ $video['snippet']['thumbnails']['default']['url'] }}" alt="" />
-					<p>{{ $video['snippet']['title'] }}</p>    
+				<li>
+					<a href="#" data-videoId="{{ $video['id']['videoId'] }}">
+						<img src="{{ $video['snippet']['thumbnails']['default']['url'] }}" alt="" />
+						<span>{{ $video['snippet']['title'] }}</span>
+					</a>
 				</li>
 			@endforeach
-		</ul>
+		</ol>
 	@else
 		<div class="error-message">
 			<p>Something went wrong! Please try again later.</p>

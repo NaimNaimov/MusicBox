@@ -11,13 +11,15 @@
 html,
 body { height: 100%; }
 
-body { display: table; width: 100%; font-family: 'Lato'; font-weight: 300; line-height: 1.2; }
+body { display: table; width: 100%; min-width: 767px; min-height: 767px; font-family: 'Lato'; font-weight: 300; line-height: 1.2; }
 
 body,
 input { color: #b0bec5; }
 
 label[for],
 input[type="submit"] { cursor: pointer; }
+
+a { color: #000; text-decoration: none; }
 
 /* ------------------------------------------------------------ *\
 	# Container
@@ -61,3 +63,21 @@ input[type="submit"] { cursor: pointer; }
 .playlist ol { list-style-position: inside; }
 .playlist li { white-space: nowrap; }
 .playlist .current { font-weight: 400; color: #000; }
+
+/* ------------------------------------------------------------ *\
+	# Search Results
+\* ------------------------------------------------------------ */
+
+.search-results { position: fixed; top: 0; left: 0; display: none; width: 200px; height: 100%; overflow: auto; box-shadow: 3px 0 3px #ccc; }
+.search-results.active { display: block; }
+
+.search-results ol { padding: 20px 10px; }
+
+.search-results li { display: block; margin-bottom: 10px; }
+.search-results li:last-child { margin-bottom: 0; }
+
+.search-results a,
+.search-results img,
+.search-results span { display: block; }
+
+.search-results img { margin: 0 auto; }
