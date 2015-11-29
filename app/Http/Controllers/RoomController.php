@@ -7,8 +7,8 @@ use Auth;
 use Validator;
 use App\Room;
 use DB;
-// use Illuminate\Routing\Redirector;
 use Illuminate\Http\RedirectResponse;
+
 class RoomController extends Controller {
 
 	/**
@@ -18,8 +18,20 @@ class RoomController extends Controller {
 	 */
 	public function index()
 	{
-		
-		return view('welcome');
+		$user_id = Auth::user()->id;
+		$user_rooms = Room::where('user_id', $user_id)
+			->where('status', 'private')
+			->get();
+		$user_public_rooms = Room::where('status', 'public')
+			->where('user_id', $user_id )
+			->get();
+		$public_rooms = Room::where('status', 'public')->get();
+		return view('room.index')
+			->with(array(
+				'user_rooms' => $user_rooms,
+				'user_public_rooms' => $user_public_rooms,
+				'public_rooms' => $public_rooms
+			));
 	}
 
 	/**
@@ -29,8 +41,6 @@ class RoomController extends Controller {
 	 */
 	public function create()
 	{
-		// $user = Auth::user();
-		// var_dump($user);
 		return view('room.create');
 	}
 
@@ -42,40 +52,29 @@ class RoomController extends Controller {
 	public function store()
 	{
 
-		$all_rooms = DB::table('rooms')->lists('name');
+		// $all_rooms = DB::table('rooms')->lists('name');
 		$input = Input::all();
 		$user_id = Auth::user()->id;
+		$validator = Validator::make($input, ['name' => 'required|unique:rooms,name']);
 		$name = $input['name'];
-		$validator = Validator::make($input, ['name' => 'required']);
-
-		if ( in_array($name, $all_rooms) ) {
-			$errors['messages']['name'] = array('This name is already taken');
-		}
-
 		if (!$name || !$user_id) {
 			return;
 		}
-		$privacy = $input['status'];
 
-		$slug = str_replace( ' ', '-', strtolower($name) );
+		if ( $validator->passes() ) {
+			$privacy = $input['status'];
+			$slug = str_replace( array(' ', ';', ), '-', strtolower($name) );
+			$room = new Room;
 
-		$room = new Room;
-
-		$room->name = $name;
-		$room->slug = $slug;
-		$room->user_id = $user_id;
-		$room->status = $privacy;
-		$room->save();
-
-		if ( $validator->passes() && !$errors) {
-			return redirect('/');
+			$room->name = $name;
+			$room->slug = $slug;
+			$room->user_id = $user_id;
+			$room->status = $privacy;
+			$room->save();
+			return redirect('/room');
 		} 
-
 		
-		var_dump( array_merge($errors,$validator->messages()) );
-		exit;
-
-		return back()->withInput()->withErrors($errors);
+		return back()->withInput()->withErrors($validator->messages());
 
 	}
 
@@ -85,9 +84,28 @@ class RoomController extends Controller {
 	 * @param  int  $id
 	 * @return Response
 	 */
-	public function show($id)
+	public function show($slug)
 	{
-		//
+		$room = Room::where('slug', $slug)->get();
+		$playlists = DB::table('playlist')->where('room_id', $room->first()->id)->get();
+
+		// var_dump($playlists);
+
+		if ( $room->isEmpty() ) {
+			abort(404);
+		};
+
+		$user_id = Auth::user()->id;
+		$is_owner = false;
+		if ($user_id === (int) $room->first()->user_id) {
+			$is_owner = true;
+		}
+
+		return view('room.show')->with(array(
+			'room' => $room,
+			'playlist' => $playlists,
+			'is_owner' => $is_owner
+		));
 	}
 
 	/**
@@ -120,7 +138,10 @@ class RoomController extends Controller {
 	 */
 	public function destroy($id)
 	{
-		//
+	  $room = Room::findOrFail($id);
+    	$room->delete();
+
+    return redirect('/');
 	}
 
 }

@@ -3,12 +3,16 @@
 @section('content')
 	<div class="container">
 		<div class="content">
-			<div class="title">Online Music Box</div>
+			<div class="title">Jukebox</div>
 
 			<div class="search form-room">
-				{!! Form::open(array('id' => 'create-room')) !!}
-					{!! Form::text('room-name', '', array('placeholder' => 'Enter Room Name') )!!}
-					
+				{!! Form::open(['action' => 'RoomController@store' ]) !!}
+					{!! Form::text('name', '', array('placeholder' => 'Enter Room Name') )!!}
+
+					@if ($errors)
+						<p class="error">{{ $errors->first('name')}}</p>
+					@endif
+
 					<div class="room-status">
 						<h4>Room Status</h4>
 

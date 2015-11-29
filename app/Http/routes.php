@@ -15,9 +15,10 @@ Route::group(['middleware' => 'auth'], function () {
 	
 	//TODO: change the home view depending on the user.
 	
-	Route::get('/', 'HomeController@index');
+	Route::get('/', 'RoomController@index');
 	Route::post('/', 'AjaxController@search_videos');
 	Route::post('add_video', 'AjaxController@add_video_to_playlist');
+	Route::post('remove_video', 'AjaxController@remove_video_from_playlist');
 	Route::resource('room', 'RoomController');
 });
 

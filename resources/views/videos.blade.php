@@ -3,7 +3,7 @@
 		<ol>
 			@foreach ($videos as $video)
 				<li>
-					<a href="#" data-videoName="{{ $video['snippet']['title'] }}" data-videoId="{{ $video['id']['videoId'] }}">
+					<a href="#" class="" data-videoName="{{ $video['snippet']['title'] }}" data-videoId="{{ $video['id']['videoId'] }}">
 						<img src="{{ $video['snippet']['thumbnails']['default']['url'] }}" alt="" />
 						<span>{{ $video['snippet']['title'] }}</span>
 					</a>
