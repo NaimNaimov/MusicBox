@@ -350,6 +350,8 @@ function playerDestroy() {
 						playerDestroy();
 						stopVideo();
 					};
+
+					playlist.items.splice($parent.index(), 1);
 				};
 			})
 		});
