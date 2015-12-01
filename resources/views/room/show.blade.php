@@ -1,6 +1,10 @@
 @extends('app')
 
 @section('content')
+
+<script>
+	var isOwner = <?php echo $is_owner ? 'true' : 'false'; ?>;
+</script>
 	<div class="container" data-token="{{ csrf_token() }}" data-slug="{{ $room->first()->slug }}">
 		<div class="content">
 			<h2>{{ $room->first()->name }}</h2>
@@ -36,9 +40,7 @@
 			<div class="search-results" id="searchResults">
 				<h3>Search Results</h3>
 
-				<div class="results-container">
-					
-				</div>
+				<div class="results-container"></div>
 			</div>
 		</div>
 	</div>

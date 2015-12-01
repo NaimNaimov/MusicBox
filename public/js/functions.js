@@ -22,17 +22,14 @@ function onYouTubeIframeAPIReady() {
 			'onReady': onPlayerReady,
 			'onStateChange': onPlayerStateChange
 		}
-	});
-
-
-	
+	});	
 }
 
 function onPlayerReady(event) {
-	
 	if (typeof player === 'undefined') {
 		return false;
 	};
+
 	if (playlist.items.length > 0) {
 		var videoId = playlist.items[videoNum].videoId;
 		
@@ -63,19 +60,30 @@ function onPlayerStateChange(event) {
 	}
 }
 
-function fillPlaylist() {
+function fillPlaylist(list) {
 	var playlistHTML = document.getElementById('playlist');
 
+	if (typeof list !== 'object') {
+		if (playlist.items.length > 0) {
+			list = playlist;
+		};
+	};
+	
+	if (list.items.length > 0) {
+		isOwner = (typeof list.user !== 'undefined') ? list.user.owner : false;
 
-	if (playlist.items.length > 0) {		
 		playlistHTML.parentNode.classList.add('active');
 		playlistHTML.innerHTML = '';
 		
-		for (var i = 0; i < playlist.items.length; i++) {	
+		for (var i = 0; i < list.items.length; i++) {	
 			var currentClass = videoNum == i ? ' class="current"' : '';
-			playlistHTML.innerHTML += '<li' + currentClass + '><a href="#" data-videoId="' + playlist.items[i].videoId + '">' + playlist.items[i].videoName + '</a> <span class="video-remove"><i class="fa fa-times"></i></span></li>';
+			var videoRemoveHTML = '<span class="video-remove"><i class="fa fa-times"></i></span>';
+			
+			playlistHTML.innerHTML += '<li' + currentClass + '><a href="#" data-videoId="' + list.items[i].videoId + '">' + list.items[i].videoName + '</a>' + (isOwner ? videoRemoveHTML : '') + '</li>';
 		};
-	} 
+
+		playlist = list;
+	}
 }
 
 function stopVideo() {
@@ -87,20 +95,23 @@ function playVideo() {
 }
 
 function playerDestroy() {
-	player.playVideo();	
+	player.destroy();	
 }
 
 ;(function($, window, document, undefined) {
 
 	var $win = $(window);
 	var $doc = $(document);
+	
 	$win.on('load', function() {
 		$('.wrapper').addClass('loaded');
-		player.addEventListener('onStateChange', function(event){
+		
+		player.addEventListener('onStateChange', function(event) {
 			if (event.data === -1) {
 				updateCurrentSong();
 			};
 		});
+
 		navPlayerControls();
 	});
 
@@ -143,14 +154,15 @@ function playerDestroy() {
 	});
 
 	function addSongToPlaylist(data) {
-		$notice = $('.notice-playlist');
+		var $notice = $('.notice-playlist');
+
 		$.ajax({
 			type: 'POST',
 			url: '/add_video',
-			data:data,
+			data: data,
 			dataType: 'json'
 		})
-		.done(function(response){
+		.done(function(response) {
 			var text;
 			$notice.removeClass('success error');
 
@@ -167,27 +179,50 @@ function playerDestroy() {
 				text = 'Something went wrong, please try again later.';
 				noticeClass = 'error';
 			}
+
 			$notice.text(text).addClass(noticeClass).fadeIn('fast');
 		})
-		.fail(function(jqXHR, error, status){
+		.fail(function(jqXHR, error, status) {
 			alert('Something went wrong, please try again later.')
 		})
-
 		.always( function() {
-			setTimeout(function(){ 
+			setTimeout(function() { 
 				$notice.fadeOut();
 			}, 3000);
-		})
+		});
 	}
 
-	function queueAddedPlaylist(){
+	function updatePlaylist() {
+		var $container = $('.container');
+
+		$.ajax({
+			type: 'POST',
+			url: '/update_playlist',
+			data: {
+				'_token' : $container.data('token'),
+				'slug' : $container.data('slug'),
+			},
+			dataType: 'json'
+		})
+		.done(function(response) {
+			console.log(response);
+			fillPlaylist(response);
+		})
+		.fail(function(jqXHR, error, status) {
+			alert('Something went wrong, please try again later.')
+		});
+	}
+
+	function queueAddedPlaylist() {
 		$playlistItems = $('.playlist li a');
 
 		if (!$playlistItems.length) {
 			return;
 		};
 
-		$playlistItems.each(function(){
+		setInterval(updatePlaylist, 5000);
+
+		$playlistItems.each(function() {
 			$this = $(this);
 			var videoId = $this.data('videoid');
 			var videoName = $this.text();
@@ -230,8 +265,7 @@ function playerDestroy() {
 		});
 	}
 
-
-	function addVideoToPlaylist(videoID, videoName ) {
+	function addVideoToPlaylist(videoID, videoName) {
 		playlist.items.push({
 			videoId: videoID,
 			videoName: videoName
@@ -245,17 +279,16 @@ function playerDestroy() {
 		fillPlaylist();
 	}
 
-
 	function scrollTopController() {
 		var $scroll = $('.scroll-top');
-		$('.scroll-top').on('click', function(e){
+		$('.scroll-top').on('click', function(e) {
 			$('html, body').animate({
 				scrollTop : $('body').offset().top
 			}, 1000);
 			e.preventDefault();
 		});
 
-		$win.on('load scroll', function(){
+		$win.on('load scroll', function() {
 			
 			if ($win.scrollTop() === 0  ) {
 				$scroll.fadeOut();
@@ -279,8 +312,6 @@ function playerDestroy() {
 	}
 
 	function navPlayerControls() {
-
-
 		var $playlist = $('.playlist');
 		var $controls = $('.navbar-player-controls');
 
@@ -288,15 +319,15 @@ function playerDestroy() {
 			$controls.hide();
 		};
 
-		$controls.find('.next').on('click', function(){
+		$controls.find('.next').on('click', function() {
 			$playlist.find('.current').next().find('a').trigger('click');
 		})
 
-		$controls.find('.prev').on('click', function(){
+		$controls.find('.prev').on('click', function() {
 			$playlist.find('.current').prev().find('a').trigger('click');
 		})
 
-		$controls.find('.toggle-play').on('click', function(){
+		$controls.find('.toggle-play').on('click', function() {
 
 			if ( $(this).hasClass('stopped') ) {
 				playVideo();
@@ -309,7 +340,6 @@ function playerDestroy() {
 	}
 
 	function removeVideoFromPlaylist() {
-
 		$doc.find('#playlist').on('click', '.video-remove', function(event) {
 			event.preventDefault();
 			var $this = $(this);
@@ -336,7 +366,7 @@ function playerDestroy() {
 				data : data,
 				dataType : 'json'
 			})
-			.done(function (response){
+			.done(function (response) {
 				
 				if (response.success) {
 					$parent = $this.parents('li')
@@ -358,11 +388,10 @@ function playerDestroy() {
 	}
 
 	function roomsToggle() {
-		$('.room-cat').on('click', function(){
+		$('.room-cat').on('click', function() {
 			$(this).toggleClass('open');
 			$(this).next().slideToggle();
 		})
 	}
-
 
 })(jQuery, window, document);

@@ -86,4 +86,27 @@ class AjaxController extends Controller
 		exit;
 
 	}
+
+	public function update_playlist(Request $request) {
+		$user = Auth::user();
+		$room = Room::where('slug', $request['slug'])->get();
+		$room_playlists = DB::table('playlist')->where('room_id', $room->first()->id)->get();
+		$playlist = array();
+
+		$is_owner = $room->first()->user_id === $user->id; 
+
+		if (!empty($room_playlists)) {
+			foreach ($room_playlists as $item) {
+				$playlist['items'][] = array(
+					'videoId' => $item->video_id,
+					'videoName' => $item->name,
+					'id' => $item->id,
+				);
+
+				$playlist['user']['owner'] = $is_owner;
+			}
+		}
+
+		return json_encode($playlist);
+	}
 }

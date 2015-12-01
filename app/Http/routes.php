@@ -20,6 +20,7 @@ Route::group(['middleware' => 'auth'], function () {
 	Route::post('add_video', 'AjaxController@add_video_to_playlist');
 	Route::post('remove_video', 'AjaxController@remove_video_from_playlist');
 	Route::resource('room', 'RoomController');
+	Route::post('update_playlist', 'AjaxController@update_playlist');
 });
 
 
